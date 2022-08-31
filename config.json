@@ -1,4 +1,4 @@
 {
-    "connection_string": "host=localhost user=postgres dbname=postgres port=54322",
+    "connection_string": "host=postgressdb user=postgres dbname=postgres port=5432",
     "port": 8080
 }

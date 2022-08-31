@@ -1,11 +1,29 @@
 version: "3"
 services:
-  db:
+  app:
+    image: golang_crud:latest
+    command: sh -c "/wait && /bin/golangcrud"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgressdb
+    environment:
+      - WAIT_HOSTS=postgressdb:5432
+      - WAIT_HOSTS_TIMEOUT=300
+      - WAIT_SLEEP_INTERVAL=30
+      - WAIT_HOST_CONNECT_TIMEOUT=30
+
+  postgressdb:
     image: "postgres:11"
     environment:
       POSTGRES_HOST_AUTH_METHOD: "trust"
     container_name: "pg_golang"
     ports:
       - "54322:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 volumes:
   pg_golang:
